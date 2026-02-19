@@ -36,3 +36,4 @@ config.yaml
 
 # Downloaded OpenAPI spec (regenerated via make download-spec)
 pulumi-spec.json
+**/.env

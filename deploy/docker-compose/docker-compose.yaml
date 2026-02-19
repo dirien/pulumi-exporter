@@ -1,0 +1,50 @@
+services:
+  pulumi-exporter:
+    build:
+      context: ../..
+      dockerfile: deploy/docker-compose/Dockerfile
+    environment:
+      - PULUMI_ACCESS_TOKEN=${PULUMI_ACCESS_TOKEN}
+      - PULUMI_ORGANIZATIONS=${PULUMI_ORGANIZATIONS:-ediri}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=prometheus:9090
+      - OTEL_EXPORTER_OTLP_METRICS_URL_PATH=/api/v1/otlp/v1/metrics
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - PULUMI_COLLECT_INTERVAL=${PULUMI_COLLECT_INTERVAL:-60s}
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-otlp-receiver
+      - --storage.tsdb.retention.time=30d
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/pulumi-exporter.json
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:

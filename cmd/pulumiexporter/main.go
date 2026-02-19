@@ -76,6 +76,7 @@ func run() error {
 	// Initialize OTel exporter.
 	otlpCfg := &exporter.OTLPConfig{
 		Endpoint: cfg.Exporters.Endpoint,
+		URLPath:  cfg.Exporters.URLPath,
 		Protocol: cfg.Exporters.Protocol,
 		Insecure: cfg.Exporters.Insecure,
 		Headers:  cfg.Exporters.Headers,

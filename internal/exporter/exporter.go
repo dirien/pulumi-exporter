@@ -17,6 +17,7 @@ import (
 // OTLPConfig holds OTLP exporter configuration.
 type OTLPConfig struct {
 	Endpoint string
+	URLPath  string
 	Protocol string
 	Insecure bool
 	Headers  map[string]string
@@ -51,6 +52,9 @@ func NewExporter(ctx context.Context, cfg *OTLPConfig, version string) (*Exporte
 		}
 		if len(cfg.Headers) > 0 {
 			opts = append(opts, otlpmetrichttp.WithHeaders(cfg.Headers))
+		}
+		if cfg.URLPath != "" {
+			opts = append(opts, otlpmetrichttp.WithURLPath(cfg.URLPath))
 		}
 
 		exp, err = otlpmetrichttp.New(ctx, opts...)

@@ -28,6 +28,7 @@ type PulumiConfig struct {
 // ExportersConfig holds exporter configuration.
 type ExportersConfig struct {
 	Endpoint string            `yaml:"endpoint"`
+	URLPath  string            `yaml:"url-path"`
 	Protocol string            `yaml:"protocol"`
 	Insecure bool              `yaml:"insecure"`
 	Headers  map[string]string `yaml:"headers"`
@@ -66,6 +67,10 @@ func RegisterFlags(app *kingpin.Application) *Config {
 		Default("http/protobuf").
 		Envar("OTEL_EXPORTER_OTLP_PROTOCOL").
 		StringVar(&cfg.Exporters.Protocol)
+
+	app.Flag("otlp.url-path", "OTLP metrics URL path (e.g. /api/v1/otlp/v1/metrics for Prometheus).").
+		Envar("OTEL_EXPORTER_OTLP_METRICS_URL_PATH").
+		StringVar(&cfg.Exporters.URLPath)
 
 	app.Flag("otlp.insecure", "Disable TLS for OTLP exporter.").
 		Default("false").
