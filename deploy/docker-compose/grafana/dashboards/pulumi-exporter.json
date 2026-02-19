@@ -538,7 +538,7 @@
       "id": 17,
       "title": "Violations",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 6, "w": 4, "x": 0, "y": 33 },
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 33 },
       "targets": [
         {
           "expr": "sum(pulumi_org_policy_violations{org=\"$org\"})",
@@ -573,7 +573,7 @@
       "id": 25,
       "title": "Policy Groups",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 3, "w": 4, "x": 4, "y": 33 },
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 33 },
       "targets": [
         {
           "expr": "pulumi_org_policy_group_count{org=\"$org\"}",
@@ -601,7 +601,7 @@
       "id": 26,
       "title": "Policy Packs",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 3, "w": 4, "x": 4, "y": 36 },
+      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 33 },
       "targets": [
         {
           "expr": "pulumi_org_policy_pack_count{org=\"$org\"}",
@@ -625,61 +625,36 @@
       }
     },
     {
-      "type": "table",
+      "type": "piechart",
       "id": 18,
-      "title": "Violation Details",
+      "title": "Violations by Level",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 6, "w": 16, "x": 8, "y": 33 },
+      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 33 },
       "targets": [
         {
           "expr": "pulumi_org_policy_violations{org=\"$org\"}",
-          "format": "table",
+          "legendFormat": "{{level}} ({{kind}})",
           "instant": true,
           "refId": "A"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "unit": "short",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 3 },
-              { "color": "red", "value": 10 }
-            ]
-          },
-          "custom": { "displayMode": "color-background-solid", "align": "center" }
+          "color": { "mode": "palette-classic" },
+          "unit": "short"
         },
         "overrides": [
-          { "matcher": { "id": "byName", "options": "level" }, "properties": [{ "id": "custom.width", "value": 120 }] },
-          { "matcher": { "id": "byName", "options": "kind" }, "properties": [{ "id": "custom.width", "value": 140 }] },
-          { "matcher": { "id": "byName", "options": "Value" }, "properties": [{ "id": "displayName", "value": "Count" }, { "id": "custom.width", "value": 100 }] }
+          { "matcher": { "id": "byRegexp", "options": "advisory.*" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "yellow" } }] },
+          { "matcher": { "id": "byRegexp", "options": "mandatory.*" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] },
+          { "matcher": { "id": "byRegexp", "options": "disabled.*" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "dark-gray" } }] }
         ]
       },
       "options": {
-        "showHeader": true,
-        "sortBy": [{ "displayName": "Count", "desc": true }],
-        "cellHeight": "sm",
-        "footer": { "show": true, "reducer": ["sum"], "countRows": false }
-      },
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "instance": true,
-              "job": true,
-              "org": true,
-              "service_name": true,
-              "service_version": true
-            },
-            "indexByName": { "level": 0, "kind": 1, "Value": 2 }
-          }
-        }
-      ]
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "pieType": "donut",
+        "tooltip": { "mode": "multi" },
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value"] }
+      }
     },
     {
       "collapsed": false,
