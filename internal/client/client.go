@@ -274,26 +274,39 @@ func (c *Client) ListPolicyViolations(ctx context.Context, org string) (*ListPol
 	return &ListPolicyViolationsResponse{PolicyViolations: violations}, nil
 }
 
-// ListNeoTasks returns the Neo AI tasks for an organization.
+// ListNeoTasks returns all Neo AI tasks for an organization, handling pagination.
 func (c *Client) ListNeoTasks(ctx context.Context, org string) (*ListNeoTasksResponse, error) {
-	resp, err := c.gen.ListTasksWithResponse(ctx, org, nil)
-	if err != nil {
-		return nil, fmt.Errorf("listing neo tasks: %w", err)
-	}
-	if resp.StatusCode() != http.StatusOK || resp.JSON200 == nil {
-		return nil, fmt.Errorf("listing neo tasks: unexpected status %d", resp.StatusCode())
-	}
+	var allTasks []NeoTask
+	var contToken *string
+	pageSize := int64(100)
 
-	tasks := make([]NeoTask, 0, len(resp.JSON200.Tasks))
-	for _, t := range resp.JSON200.Tasks {
-		tasks = append(tasks, NeoTask{
-			ID:     t.Id,
-			Name:   t.Name,
-			Status: string(t.Status),
+	for {
+		resp, err := c.gen.ListTasksWithResponse(ctx, org, &pulumiapi.ListTasksParams{
+			PageSize:          &pageSize,
+			ContinuationToken: contToken,
 		})
+		if err != nil {
+			return nil, fmt.Errorf("listing neo tasks: %w", err)
+		}
+		if resp.StatusCode() != http.StatusOK || resp.JSON200 == nil {
+			return nil, fmt.Errorf("listing neo tasks: unexpected status %d", resp.StatusCode())
+		}
+
+		for _, t := range resp.JSON200.Tasks {
+			allTasks = append(allTasks, NeoTask{
+				ID:     t.Id,
+				Name:   t.Name,
+				Status: string(t.Status),
+			})
+		}
+
+		if resp.JSON200.ContinuationToken == nil || *resp.JSON200.ContinuationToken == "" {
+			break
+		}
+		contToken = resp.JSON200.ContinuationToken
 	}
 
-	return &ListNeoTasksResponse{Tasks: tasks}, nil
+	return &ListNeoTasksResponse{Tasks: allTasks}, nil
 }
 
 func derefStr(s *string) string {
