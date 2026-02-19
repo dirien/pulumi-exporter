@@ -111,6 +111,21 @@ func (c *Config) ParseHeaders(raw string) {
 	}
 }
 
+// NormalizeOrganizations splits comma-separated organization values into individual entries.
+// This handles the case where PULUMI_ORGANIZATIONS env var contains "org1,org2,org3".
+func (c *Config) NormalizeOrganizations() {
+	var normalized []string
+	for _, org := range c.Pulumi.Organizations {
+		for _, part := range strings.Split(org, ",") {
+			trimmed := strings.TrimSpace(part)
+			if trimmed != "" {
+				normalized = append(normalized, trimmed)
+			}
+		}
+	}
+	c.Pulumi.Organizations = normalized
+}
+
 // Validate checks that required configuration values are present.
 func (c *Config) Validate() error {
 	if c.Pulumi.AccessToken == "" {

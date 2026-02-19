@@ -59,8 +59,9 @@ func run() error {
 		}
 	}
 
-	// Parse headers.
+	// Parse headers and normalize organizations.
 	cfg.ParseHeaders(*headersRaw)
+	cfg.NormalizeOrganizations()
 
 	// Validate configuration.
 	if err := cfg.Validate(); err != nil {
