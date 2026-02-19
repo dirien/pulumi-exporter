@@ -1,0 +1,13 @@
+package: pulumiapi
+output: internal/pulumiapi/client.gen.go
+generate:
+  client: true
+  models: true
+output-options:
+  response-type-suffix: Resp
+  include-operation-ids:
+    - ListUserStacks
+    - GetStackResourceCount
+    - GetStackUpdates
+    - ListStackDeploymentsHandlerV2
+    - ListOrgDeployments

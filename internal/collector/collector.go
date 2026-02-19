@@ -25,6 +25,7 @@ type Collector struct {
 	client          PulumiAPI
 	cfg             *config.Config
 	logger          *slog.Logger
+	mu              sync.Mutex
 	lastSeenVersion map[string]int
 	instruments     *Instruments
 }

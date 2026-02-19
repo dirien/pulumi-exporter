@@ -34,9 +34,13 @@ func (c *Collector) collectStack(ctx context.Context, stack client.StackSummary)
 	}
 
 	stackKey := stack.OrgName + "/" + stack.ProjectName + "/" + stack.StackName
+
+	c.mu.Lock()
 	lastVersion := c.lastSeenVersion[stackKey]
+	c.mu.Unlock()
 
 	var latestEndTime int64
+	var maxVersion int
 
 	for _, update := range updates.Updates {
 		// Only process updates newer than what we've seen.
@@ -78,10 +82,18 @@ func (c *Collector) collectStack(ctx context.Context, stack client.StackSummary)
 			latestEndTime = update.EndTime
 		}
 
-		// Update last seen version.
-		if update.Version > c.lastSeenVersion[stackKey] {
-			c.lastSeenVersion[stackKey] = update.Version
+		if update.Version > maxVersion {
+			maxVersion = update.Version
 		}
+	}
+
+	// Update last seen version under lock.
+	if maxVersion > 0 {
+		c.mu.Lock()
+		if maxVersion > c.lastSeenVersion[stackKey] {
+			c.lastSeenVersion[stackKey] = maxVersion
+		}
+		c.mu.Unlock()
 	}
 
 	// Record last update timestamp.
