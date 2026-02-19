@@ -181,26 +181,29 @@
       "id": 7,
       "title": "Resources by Stack",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 6 },
       "targets": [
         {
-          "expr": "topk(20, pulumi_stack_resource_count{org=\"$org\"} > 0)",
+          "expr": "sort_desc(topk(20, pulumi_stack_resource_count{org=\"$org\"} > 0))",
           "legendFormat": "{{project}}/{{stack}}",
+          "instant": true,
           "refId": "A"
         }
       ],
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": { "mode": "thresholds" },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               { "color": "green", "value": null },
-              { "color": "yellow", "value": 50 },
+              { "color": "yellow", "value": 30 },
+              { "color": "orange", "value": 50 },
               { "color": "red", "value": 100 }
             ]
           },
-          "unit": "short"
+          "unit": "short",
+          "custom": {}
         },
         "overrides": []
       },
@@ -211,18 +214,8 @@
         "showUnfilled": true,
         "minVizWidth": 0,
         "minVizHeight": 10,
-        "valueMode": "color",
         "namePlacement": "left"
-      },
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [{ "field": "Value", "desc": true }]
-          }
-        }
-      ]
+      }
     },
     {
       "type": "table",
