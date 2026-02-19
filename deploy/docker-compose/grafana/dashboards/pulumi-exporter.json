@@ -50,11 +50,11 @@
       "id": 2,
       "title": "Members",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 1 },
       "targets": [
         {
           "expr": "pulumi_org_member_count{org=\"$org\"}",
-          "legendFormat": "{{org}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -72,8 +72,8 @@
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name"
+        "graphMode": "area",
+        "textMode": "value"
       }
     },
     {
@@ -81,11 +81,11 @@
       "id": 3,
       "title": "Teams",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 1 },
       "targets": [
         {
           "expr": "pulumi_org_team_count{org=\"$org\"}",
-          "legendFormat": "{{org}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -103,8 +103,8 @@
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name"
+        "graphMode": "area",
+        "textMode": "value"
       }
     },
     {
@@ -112,11 +112,11 @@
       "id": 4,
       "title": "ESC Environments",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
+      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 1 },
       "targets": [
         {
           "expr": "pulumi_org_environment_count{org=\"$org\"}",
-          "legendFormat": "{{org}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -134,8 +134,8 @@
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name"
+        "graphMode": "area",
+        "textMode": "value"
       }
     },
     {
@@ -143,11 +143,11 @@
       "id": 5,
       "title": "Policy Packs",
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 1 },
       "targets": [
         {
           "expr": "pulumi_org_policy_pack_count{org=\"$org\"}",
-          "legendFormat": "{{org}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -165,8 +165,8 @@
       "options": {
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
-        "graphMode": "none",
-        "textMode": "value_and_name"
+        "graphMode": "area",
+        "textMode": "value"
       }
     },
     {
@@ -184,7 +184,7 @@
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
       "targets": [
         {
-          "expr": "pulumi_stack_resource_count{org=\"$org\"}",
+          "expr": "topk(20, pulumi_stack_resource_count{org=\"$org\"} > 0)",
           "legendFormat": "{{project}}/{{stack}}",
           "refId": "A"
         }
@@ -210,8 +210,19 @@
         "orientation": "horizontal",
         "showUnfilled": true,
         "minVizWidth": 0,
-        "minVizHeight": 10
-      }
+        "minVizHeight": 10,
+        "valueMode": "color",
+        "namePlacement": "left"
+      },
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [{ "field": "Value", "desc": true }]
+          }
+        }
+      ]
     },
     {
       "type": "table",
@@ -488,7 +499,7 @@
       "targets": [
         {
           "expr": "pulumi_org_policy_group_count{org=\"$org\"}",
-          "legendFormat": "{{org}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -507,7 +518,7 @@
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
         "graphMode": "area",
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -556,7 +567,7 @@
       "targets": [
         {
           "expr": "sum(pulumi_org_policy_violations{org=\"$org\"})",
-          "legendFormat": "Total Violations",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -579,7 +590,7 @@
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "background",
         "graphMode": "area",
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     },
     {
@@ -626,7 +637,7 @@
       "targets": [
         {
           "expr": "sum(pulumi_org_neo_task_count{org=\"$org\"})",
-          "legendFormat": "Total Tasks",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -645,7 +656,7 @@
         "reduceOptions": { "calcs": ["lastNotNull"] },
         "colorMode": "value",
         "graphMode": "area",
-        "textMode": "value_and_name"
+        "textMode": "value"
       }
     }
   ],
