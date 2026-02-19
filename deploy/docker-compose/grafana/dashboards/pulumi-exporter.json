@@ -267,7 +267,7 @@
       },
       "options": {
         "showHeader": true,
-        "sortBy": [{ "displayName": "Age", "desc": true }],
+        "sortBy": [{ "displayName": "Age", "desc": false }],
         "cellHeight": "sm",
         "footer": { "show": false }
       },
