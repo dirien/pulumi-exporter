@@ -2,10 +2,15 @@
 
 An OpenTelemetry metrics exporter for [Pulumi Cloud](https://www.pulumi.com/product/pulumi-cloud/). It polls the Pulumi API on a schedule and pushes metrics over OTLP to whatever backend you use.
 
-```
-                                              ┌──OTLP/HTTP──▶ DataDog, NewRelic, Dash0, Prometheus 2.47+
-Pulumi Cloud API  ◀──poll──  [pulumi-exporter]┤
-                                              └──OTLP/gRPC──▶ Dynatrace, OTel Collector, Grafana Alloy
+```mermaid
+graph LR
+    A[Pulumi Cloud API] -->|poll| B[pulumi-exporter]
+    B -->|OTLP/HTTP| C[Prometheus 2.47+]
+    B -->|OTLP/HTTP| D[DataDog]
+    B -->|OTLP/HTTP| E[NewRelic]
+    B -->|OTLP/gRPC| F[Dynatrace]
+    B -->|OTLP/gRPC| G[OTel Collector]
+    B -->|OTLP/gRPC| H[Grafana Alloy]
 ```
 
 The API client is generated from the official [Pulumi Cloud OpenAPI spec](https://www.pulumi.com/blog/announcing-openapi-support-pulumi-cloud/) using [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen). The image is built on `cgr.dev/chainguard/static` (distroless, zero CVEs). All release artifacts are signed with [Cosign](https://github.com/sigstore/cosign) and include an SBOM.
@@ -67,17 +72,36 @@ PULUMI_ORGANIZATIONS=my-org,another-org,third-org
 
 Every metric includes an `org` label, so you can filter and compare across organizations in your dashboards. The bundled Grafana dashboard has a multi-select Organization dropdown that looks like this:
 
-```
-┌──────────────────────────────────────────────────────┐
-│  Organization: [my-org ✕] [another-org ✕] [All]      │
-├──────────────────────────────────────────────────────┤
-│  Members    │  Teams    │  ESC Envs   │  Policy Packs │
-│  42         │  8        │  15         │  3            │
-│  my-org     │  my-org   │  my-org     │  my-org       │
-├─────────────┼───────────┼─────────────┼───────────────┤
-│  31         │  5        │  7          │  12           │
-│  another-org│ another.. │  another..  │  another-org  │
-└──────────────────────────────────────────────────────┘
+```mermaid
+block-beta
+    columns 4
+    block:header:4
+        dropdown["Organization: my-org | another-org | All"]
+    end
+    block:row1a
+        m1["Members\n42\nmy-org"]
+    end
+    block:row1b
+        t1["Teams\n8\nmy-org"]
+    end
+    block:row1c
+        e1["ESC Envs\n15\nmy-org"]
+    end
+    block:row1d
+        p1["Policy Packs\n3\nmy-org"]
+    end
+    block:row2a
+        m2["Members\n31\nanother-org"]
+    end
+    block:row2b
+        t2["Teams\n5\nanother-org"]
+    end
+    block:row2c
+        e2["ESC Envs\n7\nanother-org"]
+    end
+    block:row2d
+        p2["Policy Packs\n12\nanother-org"]
+    end
 ```
 
 Each org's data is collected in parallel. See [docs/configuration.md](docs/configuration.md) for tuning concurrency and intervals when monitoring large organizations.
