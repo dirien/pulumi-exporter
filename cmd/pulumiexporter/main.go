@@ -13,11 +13,11 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
+	"github.com/dirien/pulumi-exporter/internal/buildinfo"
 	"github.com/dirien/pulumi-exporter/internal/client"
 	"github.com/dirien/pulumi-exporter/internal/collector"
 	"github.com/dirien/pulumi-exporter/internal/config"
 	"github.com/dirien/pulumi-exporter/internal/exporter"
-	"github.com/dirien/pulumi-exporter/internal/version"
 )
 
 // Main is the entrypoint for the pulumi-exporter application.
@@ -30,7 +30,7 @@ func Main() {
 
 func run() error {
 	app := kingpin.New("pulumi-exporter", "OpenTelemetry Pulumi Cloud metrics exporter.")
-	app.Version(version.Print("pulumi-exporter"))
+	app.Version(buildinfo.Print("pulumi-exporter"))
 	app.HelpFlag.Short('h')
 
 	cfg := config.RegisterFlags(app)
@@ -69,7 +69,7 @@ func run() error {
 	}
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
-	logger.Info("starting pulumi-exporter", "version", version.Version)
+	logger.Info("starting pulumi-exporter", "version", buildinfo.Version)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -83,7 +83,7 @@ func run() error {
 		Headers:  cfg.Exporters.Headers,
 	}
 
-	exp, err := exporter.NewExporter(ctx, otlpCfg, version.Version)
+	exp, err := exporter.NewExporter(ctx, otlpCfg, buildinfo.Version)
 	if err != nil {
 		return fmt.Errorf("failed to create exporter: %w", err)
 	}

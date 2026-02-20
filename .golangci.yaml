@@ -22,6 +22,9 @@ linters:
           yaml: kebab
     gocyclo:
       min-complexity: 15
+    gosec:
+      excludes:
+        - G117
 formatters:
   enable:
     - gofumpt

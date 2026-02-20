@@ -18,7 +18,7 @@ REVISION     ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo unknown)
 BRANCH       ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)
 BUILD_DATE   ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 
-VERSION_PKG  := github.com/dirien/pulumi-exporter/internal/version
+VERSION_PKG  := github.com/dirien/pulumi-exporter/internal/buildinfo
 LDFLAGS      += -X $(VERSION_PKG).Version=$(VERSION)
 LDFLAGS      += -X $(VERSION_PKG).Revision=$(REVISION)
 LDFLAGS      += -X $(VERSION_PKG).Branch=$(BRANCH)

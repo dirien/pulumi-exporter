@@ -7,11 +7,11 @@ builds:
   - binary: pulumi-exporter
     ldflags:
       - -s -w
-      - -X github.com/dirien/pulumi-exporter/internal/version.Version={{.Version}}
-      - -X github.com/dirien/pulumi-exporter/internal/version.Revision={{.FullCommit}}
-      - -X github.com/dirien/pulumi-exporter/internal/version.Branch={{.Branch}}
-      - -X github.com/dirien/pulumi-exporter/internal/version.BuildUser=goreleaser
-      - -X github.com/dirien/pulumi-exporter/internal/version.BuildDate={{.Date}}
+      - -X github.com/dirien/pulumi-exporter/internal/buildinfo.Version={{.Version}}
+      - -X github.com/dirien/pulumi-exporter/internal/buildinfo.Revision={{.FullCommit}}
+      - -X github.com/dirien/pulumi-exporter/internal/buildinfo.Branch={{.Branch}}
+      - -X github.com/dirien/pulumi-exporter/internal/buildinfo.BuildUser=goreleaser
+      - -X github.com/dirien/pulumi-exporter/internal/buildinfo.BuildDate={{.Date}}
     goos:
       - linux
       - windows

@@ -1,5 +1,5 @@
-// Package version holds build-time version information, injected via ldflags.
-package version
+// Package buildinfo holds build-time version information, injected via ldflags.
+package buildinfo
 
 import "fmt"
 

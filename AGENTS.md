@@ -31,7 +31,7 @@ internal/collector/org.go               → org-level collection (members, teams
 internal/collector/collector_test.go    → mock API + OTel ManualReader tests
 internal/config/                        → CLI flags + env vars + YAML config
 internal/exporter/                      → OTel MeterProvider / OTLP exporter setup
-internal/version/                       → build-time version info (ldflags)
+internal/buildinfo/                       → build-time version info (ldflags)
 dashboards/pulumi-exporter.json         → Grafana dashboard JSON (26 panels, 17 metrics)
 deploy/docker-compose/                  → Prometheus + Grafana + exporter stack
 charts/pulumi-exporter/                 → Helm chart (templates, values, ci test values)
