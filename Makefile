@@ -28,6 +28,7 @@ LDFLAGS      += -X $(VERSION_PKG).BuildDate=$(BUILD_DATE)
 .PHONY: all build test test-race lint fmt vet clean generate download-spec help
 .PHONY: release-snapshot docker run helm-lint helm-docs helm-template helm-test ct-lint
 .PHONY: kind-create kind-delete ct-install helm-test-e2e
+.PHONY: compose-up compose-down compose-logs compose-restart
 
 all: lint test build ## Run lint, test, and build
 
@@ -111,6 +112,22 @@ ct-install: ## Run ct install against a kind cluster (requires kind-create first
 	ct install --debug --config .github/configs/ct-lint.yaml --charts charts/pulumi-exporter
 
 helm-test-e2e: kind-create ct-install kind-delete ## Create kind cluster, run ct install, tear down
+
+COMPOSE_DIR  := deploy/docker-compose
+
+##@ Docker Compose (local stack)
+
+compose-up: ## Start local Prometheus + Grafana + exporter stack
+	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml up --build -d
+
+compose-down: ## Stop local stack
+	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml down
+
+compose-logs: ## Tail exporter logs
+	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml logs -f pulumi-exporter
+
+compose-restart: ## Rebuild and restart the exporter container only
+	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml up --build -d pulumi-exporter
 
 ##@ Release
 
