@@ -117,17 +117,19 @@ COMPOSE_DIR  := deploy/docker-compose
 
 ##@ Docker Compose (local stack)
 
+COMPOSE_CMD  := DASHBOARDS_DIR=$(CURDIR)/dashboards docker compose -f $(COMPOSE_DIR)/docker-compose.yaml
+
 compose-up: ## Start local Prometheus + Grafana + exporter stack
-	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml up --build -d
+	$(COMPOSE_CMD) up --build -d
 
 compose-down: ## Stop local stack
-	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml down
+	$(COMPOSE_CMD) down
 
 compose-logs: ## Tail exporter logs
-	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml logs -f pulumi-exporter
+	$(COMPOSE_CMD) logs -f pulumi-exporter
 
 compose-restart: ## Rebuild and restart the exporter container only
-	docker compose -f $(COMPOSE_DIR)/docker-compose.yaml up --build -d pulumi-exporter
+	$(COMPOSE_CMD) up --build -d pulumi-exporter
 
 ##@ Release
 

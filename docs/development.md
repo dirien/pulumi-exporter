@@ -102,6 +102,7 @@ pulumi-exporter/
 │   │   └── collector_test.go
 │   ├── exporter/                        # OTel MeterProvider setup
 │   └── version/                         # Build-time version info
+├── dashboards/                          # Grafana dashboard JSON
 ├── charts/pulumi-exporter/              # Helm chart
 ├── deploy/docker-compose/               # Prometheus + Grafana + exporter
 ├── docs/                                # Documentation
@@ -166,6 +167,6 @@ Generation is scoped to the 13 operations the exporter uses (configured in `oapi
    - Add response types to `internal/client/types.go`
    - Add the method to the `PulumiAPI` interface in `internal/collector/collector.go`
    - Add a stub to the mock in `internal/collector/collector_test.go`
-4. Add Grafana panels to `deploy/docker-compose/grafana/dashboards/pulumi-exporter.json`
+4. Add Grafana panels to `dashboards/pulumi-exporter.json`
 5. Run `make helm-docs` if chart values changed
 6. Add tests

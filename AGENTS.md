@@ -32,6 +32,7 @@ internal/collector/collector_test.go    → mock API + OTel ManualReader tests
 internal/config/                        → CLI flags + env vars + YAML config
 internal/exporter/                      → OTel MeterProvider / OTLP exporter setup
 internal/version/                       → build-time version info (ldflags)
+dashboards/pulumi-exporter.json         → Grafana dashboard JSON (26 panels, 17 metrics)
 deploy/docker-compose/                  → Prometheus + Grafana + exporter stack
 charts/pulumi-exporter/                 → Helm chart (templates, values, ci test values)
 .github/configs/                        → ct-lint, cr, lintconf YAML configs
@@ -90,7 +91,7 @@ charts/pulumi-exporter/                 → Helm chart (templates, values, ci te
    - Add a wrapper method to `internal/client/client.go`
    - Add the method to the `PulumiAPI` interface in `internal/collector/collector.go`
    - Add stubs to `mockAPI` and `slowMockAPI` in `internal/collector/collector_test.go`
-4. Add Grafana panels to `deploy/docker-compose/grafana/dashboards/pulumi-exporter.json`
+4. Add Grafana panels to `dashboards/pulumi-exporter.json`
 5. Update the metrics table in `README.md`
 
 ### Cyclomatic Complexity
@@ -182,7 +183,7 @@ docker compose up --build -d
 
 - Grafana: http://localhost:3000 (admin/admin)
 - Prometheus: http://localhost:9090
-- Dashboard JSON: `deploy/docker-compose/grafana/dashboards/pulumi-exporter.json`
+- Dashboard JSON: `dashboards/pulumi-exporter.json` (mounted into Grafana via docker-compose volume)
 
 ## Key Files to Read First
 

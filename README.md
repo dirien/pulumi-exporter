@@ -142,6 +142,7 @@ Run `make help` to see everything. Here are the ones you'll use most:
 |---|---|
 | [Configuration](docs/configuration.md) | Flags, env vars, YAML config, multi-org, large orgs |
 | [Metrics reference](docs/metrics.md) | All 17 metrics with types, labels, histogram buckets |
+| [Grafana dashboard](docs/dashboards.md) | Out-of-the-box dashboard with 26 panels, import guide |
 | [Backend setup](docs/backends.md) | Prometheus, Grafana Alloy, DataDog, NewRelic, Dynatrace |
 | [Kubernetes and Helm](docs/kubernetes.md) | Helm chart, raw manifests, chart CI/CD |
 | [Development](docs/development.md) | Build, test, project structure, OpenAPI generation, contributing |
