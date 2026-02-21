@@ -21,7 +21,7 @@ Polls the Pulumi API on a configurable interval and pushes metrics over OTLP to 
 To install the chart using the OCI artifact, run:
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter --version 0.1.0
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter --version 0.1.0
 ```
 
 Requires Helm >= 3.8.0.
@@ -29,7 +29,7 @@ Requires Helm >= 3.8.0.
 ## Usage (via Helm Repository)
 
 ```bash
-helm repo add pulumi-exporter https://dirien.github.io/pulumi-exporter
+helm repo add pulumi-exporter https://pulumi-labs.github.io/pulumi-exporter
 helm repo update
 ```
 
@@ -84,7 +84,7 @@ helm uninstall pulumi-exporter
 | extraEnv | list | `[]` | Extra environment variables |
 | fullnameOverride | string | `""` | String to override the default generated fullname |
 | image.pullPolicy | string | `"IfNotPresent"` | The docker image pull policy |
-| image.repository | string | `"ghcr.io/dirien/pulumi-exporter"` | The docker image repository to use |
+| image.repository | string | `"ghcr.io/pulumi-labs/pulumi-exporter"` | The docker image repository to use |
 | image.tag | string | `""` | The docker image tag to use @default Chart appVersion |
 | maxConcurrency | int | `10` | Maximum number of concurrent stack API calls (1-100) |
 | nameOverride | string | `""` | String to override the default generated name |
@@ -121,14 +121,14 @@ helm uninstall pulumi-exporter
 | serviceMonitor.enabled | bool | `false` | When set true then use a ServiceMonitor to configure scraping |
 | tolerations | list | `[]` | Set the tolerations for the pod. |
 
-**Homepage:** <https://github.com/dirien/pulumi-exporter/>
+**Homepage:** <https://github.com/pulumi-labs/pulumi-exporter/>
 
 ## Source Code
 
-* <https://github.com/dirien/pulumi-exporter/>
+* <https://github.com/pulumi-labs/pulumi-exporter/>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| dirien | <engin.diri@ediri.de> |  |
+| pulumi-labs | <engin.diri@ediri.de> |  |

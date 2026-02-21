@@ -1,4 +1,4 @@
-module github.com/dirien/pulumi-exporter
+module github.com/pulumi-labs/pulumi-exporter
 
 go 1.24.0
 

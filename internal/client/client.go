@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dirien/pulumi-exporter/internal/pulumiapi"
+	"github.com/pulumi-labs/pulumi-exporter/internal/pulumiapi"
 )
 
 // Client wraps the generated OpenAPI client with typed convenience methods.

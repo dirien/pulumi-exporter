@@ -10,8 +10,8 @@ import (
 	"go.opentelemetry.io/otel/metric"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/dirien/pulumi-exporter/internal/client"
-	"github.com/dirien/pulumi-exporter/internal/config"
+	"github.com/pulumi-labs/pulumi-exporter/internal/client"
+	"github.com/pulumi-labs/pulumi-exporter/internal/config"
 )
 
 // PulumiAPI defines the interface for interacting with the Pulumi Cloud API.

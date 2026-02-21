@@ -33,7 +33,7 @@ Open Grafana at http://localhost:3000 (admin / admin). The dashboard loads autom
 ### Helm (Kubernetes)
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
   --set existingSecret=pulumi-credentials \
   --set "pulumiOrganizations={my-org}" \
   --set otlp.endpoint=otel-collector:4318 \
@@ -50,13 +50,13 @@ docker run --rm \
   -e PULUMI_ORGANIZATIONS=my-org \
   -e OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4318 \
   -e OTEL_EXPORTER_OTLP_INSECURE=true \
-  ghcr.io/dirien/pulumi-exporter:latest
+  ghcr.io/pulumi-labs/pulumi-exporter:latest
 ```
 
 ### Binary
 
 ```bash
-curl -sSfL https://github.com/dirien/pulumi-exporter/releases/latest/download/pulumi-exporter_linux_amd64.tar.gz | tar xz
+curl -sSfL https://github.com/pulumi-labs/pulumi-exporter/releases/latest/download/pulumi-exporter_linux_amd64.tar.gz | tar xz
 ./pulumi-exporter --pulumi.organizations=my-org --otlp.endpoint=localhost:4318 --otlp.insecure
 ```
 
@@ -149,4 +149,4 @@ Run `make help` to see everything. Here are the ones you'll use most:
 
 ## License
 
-Apache-2.0
+MIT

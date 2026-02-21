@@ -13,11 +13,11 @@ import (
 
 	"github.com/alecthomas/kingpin/v2"
 
-	"github.com/dirien/pulumi-exporter/internal/appinfo"
-	"github.com/dirien/pulumi-exporter/internal/client"
-	"github.com/dirien/pulumi-exporter/internal/collector"
-	"github.com/dirien/pulumi-exporter/internal/config"
-	"github.com/dirien/pulumi-exporter/internal/exporter"
+	"github.com/pulumi-labs/pulumi-exporter/internal/appinfo"
+	"github.com/pulumi-labs/pulumi-exporter/internal/client"
+	"github.com/pulumi-labs/pulumi-exporter/internal/collector"
+	"github.com/pulumi-labs/pulumi-exporter/internal/config"
+	"github.com/pulumi-labs/pulumi-exporter/internal/exporter"
 )
 
 // Main is the entrypoint for the pulumi-exporter application.

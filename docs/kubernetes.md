@@ -5,7 +5,7 @@
 ### OCI Registry
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
   --set existingSecret=pulumi-credentials \
   --set "pulumiOrganizations={my-org}" \
   --set otlp.endpoint=otel-collector:4318 \
@@ -15,7 +15,7 @@ helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
 ### Helm Repository
 
 ```bash
-helm repo add pulumi-exporter https://dirien.github.io/pulumi-exporter
+helm repo add pulumi-exporter https://pulumi-labs.github.io/pulumi-exporter
 helm repo update
 helm install pulumi-exporter pulumi-exporter/pulumi-exporter
 ```
@@ -30,7 +30,7 @@ kubectl create secret generic pulumi-credentials \
 ```
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
   --set existingSecret=pulumi-credentials \
   --set "pulumiOrganizations={my-org,another-org}" \
   --set otlp.endpoint=otel-collector:4318
@@ -39,7 +39,7 @@ helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
 For development, pass the token directly (the chart creates a Secret):
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
   --set pulumiAccessToken=pul-xxx \
   --set "pulumiOrganizations={my-org}" \
   --set otlp.endpoint=otel-collector:4318
@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
         - name: pulumi-exporter
-          image: ghcr.io/dirien/pulumi-exporter:latest
+          image: ghcr.io/pulumi-labs/pulumi-exporter:latest
           args:
             - --pulumi.organizations=my-org
             - --otlp.endpoint=otel-collector.monitoring:4318
@@ -123,4 +123,4 @@ The chart ships with two GitHub Actions workflows:
 | `helm-publish.yaml` | Push to `main` touching `charts/**` | ArtifactHub lint, chart-releaser (GH Pages), OCI push to GHCR, cosign sign |
 | `lint-and-test.yaml` | PR touching `charts/**` | Trivy IaC scan, ct lint, ArtifactHub lint, kind cluster + ct install |
 
-Charts are published both as a GitHub Pages Helm repo and as OCI artifacts to `ghcr.io/dirien/charts/pulumi-exporter`.
+Charts are published both as a GitHub Pages Helm repo and as OCI artifacts to `ghcr.io/pulumi-labs/charts/pulumi-exporter`.

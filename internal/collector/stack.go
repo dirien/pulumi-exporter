@@ -6,7 +6,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
 
-	"github.com/dirien/pulumi-exporter/internal/client"
+	"github.com/pulumi-labs/pulumi-exporter/internal/client"
 )
 
 func (c *Collector) collectStack(ctx context.Context, stack client.StackSummary) {

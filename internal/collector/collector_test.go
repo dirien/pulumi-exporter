@@ -9,8 +9,8 @@ import (
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/metric/metricdata"
 
-	"github.com/dirien/pulumi-exporter/internal/client"
-	"github.com/dirien/pulumi-exporter/internal/config"
+	"github.com/pulumi-labs/pulumi-exporter/internal/client"
+	"github.com/pulumi-labs/pulumi-exporter/internal/config"
 )
 
 type mockAPI struct {

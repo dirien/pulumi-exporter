@@ -21,7 +21,7 @@ Polls the Pulumi API on a configurable interval and pushes metrics over OTLP to 
 To install the chart using the OCI artifact, run:
 
 ```bash
-helm install pulumi-exporter oci://ghcr.io/dirien/charts/pulumi-exporter --version {{ .Version }}
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter --version {{ .Version }}
 ```
 
 Requires Helm >= 3.8.0.
@@ -29,7 +29,7 @@ Requires Helm >= 3.8.0.
 ## Usage (via Helm Repository)
 
 ```bash
-helm repo add pulumi-exporter https://dirien.github.io/pulumi-exporter
+helm repo add pulumi-exporter https://pulumi-labs.github.io/pulumi-exporter
 helm repo update
 ```
 

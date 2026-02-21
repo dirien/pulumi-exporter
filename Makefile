@@ -1,5 +1,5 @@
 BINARY       := pulumi-exporter
-MODULE       := github.com/dirien/pulumi-exporter
+MODULE       := github.com/pulumi-labs/pulumi-exporter
 GO           := go
 GOFLAGS      ?=
 LDFLAGS      := -s -w
@@ -18,7 +18,7 @@ REVISION     ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo unknown)
 BRANCH       ?= $(shell git rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)
 BUILD_DATE   ?= $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
 
-VERSION_PKG  := github.com/dirien/pulumi-exporter/internal/appinfo
+VERSION_PKG  := github.com/pulumi-labs/pulumi-exporter/internal/appinfo
 LDFLAGS      += -X $(VERSION_PKG).Version=$(VERSION)
 LDFLAGS      += -X $(VERSION_PKG).Revision=$(REVISION)
 LDFLAGS      += -X $(VERSION_PKG).Branch=$(BRANCH)
@@ -107,8 +107,8 @@ kind-delete: ## Delete the kind cluster
 	kind delete cluster --name $(KIND_CLUSTER)
 
 ct-install: ## Run ct install against a kind cluster (requires kind-create first)
-	docker build -t ghcr.io/dirien/pulumi-exporter:0.1.0 -f deploy/docker-compose/Dockerfile .
-	kind load docker-image ghcr.io/dirien/pulumi-exporter:0.1.0 --name $(KIND_CLUSTER)
+	docker build -t ghcr.io/pulumi-labs/pulumi-exporter:0.1.0 -f deploy/docker-compose/Dockerfile .
+	kind load docker-image ghcr.io/pulumi-labs/pulumi-exporter:0.1.0 --name $(KIND_CLUSTER)
 	ct install --debug --config .github/configs/ct-lint.yaml --charts charts/pulumi-exporter
 
 helm-test-e2e: kind-create ct-install kind-delete ## Create kind cluster, run ct install, tear down

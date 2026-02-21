@@ -14,7 +14,7 @@ serviceAccount:
 
 image:
   # -- The docker image repository to use
-  repository: ghcr.io/dirien/pulumi-exporter
+  repository: ghcr.io/pulumi-labs/pulumi-exporter
   # -- The docker image tag to use
   # @default Chart appVersion
   tag: ""

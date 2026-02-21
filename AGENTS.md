@@ -49,7 +49,7 @@ charts/pulumi-exporter/                 → Helm chart (templates, values, ci te
 
 ## Go Version and Module
 
-- Go 1.24+, module `github.com/dirien/pulumi-exporter`
+- Go 1.24+, module `github.com/pulumi-labs/pulumi-exporter`
 - Dependencies: OTel SDK, oapi-codegen runtime, kingpin CLI, golang.org/x/sync
 
 ## Coding Conventions
@@ -114,7 +114,7 @@ Never edit `client.gen.go` manually — always modify `oapi-codegen.yaml` and ru
 
 ## Helm Chart
 
-The chart lives under `charts/pulumi-exporter/`. It follows the same patterns as [dirien/minecraft-prometheus-exporter](https://github.com/dirien/minecraft-prometheus-exporter).
+The chart lives under `charts/pulumi-exporter/`. It follows the same patterns as [pulumi-labs/minecraft-prometheus-exporter](https://github.com/pulumi-labs/minecraft-prometheus-exporter).
 
 ### Chart Structure
 
