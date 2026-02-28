@@ -12,14 +12,6 @@ helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
   --set otlp.insecure=true
 ```
 
-### Helm Repository
-
-```bash
-helm repo add pulumi-exporter https://pulumi-labs.github.io/pulumi-exporter
-helm repo update
-helm install pulumi-exporter pulumi-exporter/pulumi-exporter
-```
-
 ### Secret Management
 
 For production, create the secret separately and reference it:

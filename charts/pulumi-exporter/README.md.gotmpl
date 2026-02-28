@@ -27,23 +27,11 @@ helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter --
 
 Requires Helm >= 3.8.0.
 
-## Usage (via Helm Repository)
-
-```bash
-helm repo add pulumi-exporter https://pulumi-labs.github.io/pulumi-exporter
-helm repo update
-```
-
-### Installing the Chart
-
-```bash
-helm install pulumi-exporter pulumi-exporter/pulumi-exporter --version {{ .Version }}
-```
-
 ### Example: Minimal Installation
 
 ```bash
-helm install pulumi-exporter pulumi-exporter/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
+  --version {{ .Version }} \
   --set pulumiAccessToken=pul-xxxxxxxxxxxx \
   --set "pulumiOrganizations={my-org}" \
   --set otlp.endpoint=otel-collector:4318 \
@@ -62,7 +50,8 @@ kubectl create secret generic pulumi-credentials \
 Then install with:
 
 ```bash
-helm install pulumi-exporter pulumi-exporter/pulumi-exporter \
+helm install pulumi-exporter oci://ghcr.io/pulumi-labs/charts/pulumi-exporter \
+  --version {{ .Version }} \
   --set existingSecret=pulumi-credentials \
   --set "pulumiOrganizations={my-org,another-org}" \
   --set otlp.endpoint=otel-collector:4318 \
