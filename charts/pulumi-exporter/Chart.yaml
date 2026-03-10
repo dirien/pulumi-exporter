@@ -10,7 +10,7 @@ keywords:
   - exporter
   - prometheus
 type: application
-version: 0.1.2
+version: 0.1.3
 appVersion: 0.1.1
 home: https://github.com/pulumi-labs/pulumi-exporter/
 sources:
@@ -20,10 +20,10 @@ maintainers:
     name: pulumi-labs
 
 annotations:
-  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/changes: |
-    - kind: security
-      description: Bump Go minimum version to 1.24.13 to fix CVE-2025-68121 (crypto/tls session resumption)
+    - kind: fixed
+      description: Remove non-existent Helm repository references from chart docs (OCI-only)
   artifacthub.io/images: |
     - name: pulumi-exporter
       image: ghcr.io/pulumi-labs/pulumi-exporter:0.1.1
