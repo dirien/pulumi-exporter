@@ -11,7 +11,7 @@ func TestNewExporterHTTP(t *testing.T) {
 	ctx := context.Background()
 	cfg := &OTLPConfig{
 		Endpoint: "localhost:4318",
-		Protocol: "http/protobuf",
+		Protocol: protocolHTTPProtobuf,
 		Insecure: true,
 	}
 
@@ -32,7 +32,7 @@ func TestNewExporterGRPC(t *testing.T) {
 	ctx := context.Background()
 	cfg := &OTLPConfig{
 		Endpoint: "localhost:4317",
-		Protocol: "grpc",
+		Protocol: protocolGRPC,
 		Insecure: true,
 	}
 
@@ -69,7 +69,7 @@ func TestShutdown(t *testing.T) {
 	ctx := context.Background()
 	cfg := &OTLPConfig{
 		Endpoint: "localhost:4318",
-		Protocol: "http/protobuf",
+		Protocol: protocolHTTPProtobuf,
 		Insecure: true,
 	}
 

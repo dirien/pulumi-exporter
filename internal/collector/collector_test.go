@@ -13,6 +13,14 @@ import (
 	"github.com/pulumi-labs/pulumi-exporter/internal/config"
 )
 
+const (
+	testOrg        = "test-org"
+	testStackKey   = "test-org/my-project/dev"
+	testUpdateKind = "update"
+	testResultOK   = "succeeded"
+	testCreatedAt  = "2024-01-01T00:00:00Z"
+)
+
 type mockAPI struct {
 	stacks      *client.ListStacksResponse
 	resources   map[string]*client.ResourceCountResponse
@@ -79,7 +87,7 @@ func newTestCollector(t *testing.T, api PulumiAPI) (*Collector, *sdkmetric.Manua
 
 	cfg := &config.Config{
 		Pulumi: config.PulumiConfig{
-			Organizations:   []string{"test-org"},
+			Organizations:   []string{testOrg},
 			CollectInterval: 10 * time.Second,
 			MaxConcurrency:  10,
 		},
@@ -98,14 +106,14 @@ func TestCollectStack(t *testing.T) {
 
 	api := &mockAPI{
 		resources: map[string]*client.ResourceCountResponse{
-			"test-org/my-project/dev": {Count: 42, Version: 1},
+			testStackKey: {Count: 42, Version: 1},
 		},
 		updates: map[string]*client.ListUpdatesResponse{
-			"test-org/my-project/dev": {
+			testStackKey: {
 				Updates: []client.UpdateInfo{
 					{
-						Kind:      "update",
-						Result:    "succeeded",
+						Kind:      testUpdateKind,
+						Result:    testResultOK,
 						StartTime: 1000,
 						EndTime:   1060,
 						Version:   1,
@@ -123,7 +131,7 @@ func TestCollectStack(t *testing.T) {
 	ctx := context.Background()
 
 	stack := client.StackSummary{
-		OrgName:     "test-org",
+		OrgName:     testOrg,
 		ProjectName: "my-project",
 		StackName:   "dev",
 	}
@@ -170,11 +178,11 @@ func TestCollectOrgDeployments(t *testing.T) {
 
 	api := &mockAPI{
 		deployments: map[string]*client.ListDeploymentsResponse{
-			"test-org": {
+			testOrg: {
 				Deployments: []client.DeploymentInfo{
-					{ID: "1", Status: "running", Created: "2024-01-01T00:00:00Z"},
-					{ID: "2", Status: "running", Created: "2024-01-01T00:00:00Z"},
-					{ID: "3", Status: "succeeded", Created: "2024-01-01T00:00:00Z"},
+					{ID: "1", Status: "running", Created: testCreatedAt},
+					{ID: "2", Status: "running", Created: testCreatedAt},
+					{ID: "3", Status: testResultOK, Created: testCreatedAt},
 				},
 			},
 		},
@@ -183,7 +191,7 @@ func TestCollectOrgDeployments(t *testing.T) {
 	c, reader := newTestCollector(t, api)
 	ctx := context.Background()
 
-	c.collectOrgDeployments(ctx, "test-org")
+	c.collectOrgDeployments(ctx, testOrg)
 
 	var rm metricdata.ResourceMetrics
 	if err := reader.Collect(ctx, &rm); err != nil {
@@ -211,13 +219,13 @@ func TestLastSeenVersionTracking(t *testing.T) {
 
 	api := &mockAPI{
 		resources: map[string]*client.ResourceCountResponse{
-			"test-org/my-project/dev": {Count: 10, Version: 1},
+			testStackKey: {Count: 10, Version: 1},
 		},
 		updates: map[string]*client.ListUpdatesResponse{
-			"test-org/my-project/dev": {
+			testStackKey: {
 				Updates: []client.UpdateInfo{
-					{Kind: "update", Result: "succeeded", StartTime: 1000, EndTime: 1060, Version: 1},
-					{Kind: "update", Result: "succeeded", StartTime: 2000, EndTime: 2120, Version: 2},
+					{Kind: testUpdateKind, Result: testResultOK, StartTime: 1000, EndTime: 1060, Version: 1},
+					{Kind: testUpdateKind, Result: testResultOK, StartTime: 2000, EndTime: 2120, Version: 2},
 				},
 			},
 		},
@@ -227,7 +235,7 @@ func TestLastSeenVersionTracking(t *testing.T) {
 	ctx := context.Background()
 
 	stack := client.StackSummary{
-		OrgName:     "test-org",
+		OrgName:     testOrg,
 		ProjectName: "my-project",
 		StackName:   "dev",
 	}
@@ -241,7 +249,7 @@ func TestLastSeenVersionTracking(t *testing.T) {
 	}
 
 	// Verify lastSeenVersion was updated.
-	key := "test-org/my-project/dev"
+	key := testStackKey
 	if c.lastSeenVersion[key] != 2 {
 		t.Errorf("expected lastSeenVersion=2, got %d", c.lastSeenVersion[key])
 	}
@@ -269,11 +277,11 @@ func TestCollectConcurrency(t *testing.T) {
 	for i := range 20 {
 		name := "stack-" + string(rune('a'+i))
 		stacks[i] = client.StackSummary{
-			OrgName:     "test-org",
+			OrgName:     testOrg,
 			ProjectName: "project",
 			StackName:   name,
 		}
-		key := "test-org/project/" + name
+		key := testOrg + "/project/" + name
 		resources[key] = &client.ResourceCountResponse{Count: i}
 		updates[key] = &client.ListUpdatesResponse{}
 	}
@@ -282,7 +290,7 @@ func TestCollectConcurrency(t *testing.T) {
 		stacks:      &client.ListStacksResponse{Stacks: stacks},
 		resources:   resources,
 		updates:     updates,
-		deployments: map[string]*client.ListDeploymentsResponse{"test-org": {Deployments: nil}},
+		deployments: map[string]*client.ListDeploymentsResponse{testOrg: {Deployments: nil}},
 	}
 
 	c, _ := newTestCollector(t, api)
@@ -304,7 +312,7 @@ func TestCollectTimeout(t *testing.T) {
 
 	cfg := &config.Config{
 		Pulumi: config.PulumiConfig{
-			Organizations:   []string{"test-org"},
+			Organizations:   []string{testOrg},
 			CollectInterval: 1 * time.Second, // Short interval -> timeout clamps to 10s minimum
 			MaxConcurrency:  5,
 		},

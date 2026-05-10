@@ -11,7 +11,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const protocolHTTPProtobuf = "http/protobuf"
+const (
+	protocolHTTPProtobuf = "http/protobuf"
+	protocolGRPC         = "grpc"
+)
 
 // Config holds the complete application configuration.
 type Config struct {
@@ -149,7 +152,7 @@ func (c *Config) Validate() error {
 	}
 
 	switch c.Exporters.Protocol {
-	case protocolHTTPProtobuf, "grpc":
+	case protocolHTTPProtobuf, protocolGRPC:
 		// valid
 	default:
 		return fmt.Errorf("unsupported OTLP protocol: %q (must be http/protobuf or grpc)", c.Exporters.Protocol)
