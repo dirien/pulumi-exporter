@@ -14,6 +14,11 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+const (
+	protocolHTTPProtobuf = "http/protobuf"
+	protocolGRPC         = "grpc"
+)
+
 // OTLPConfig holds OTLP exporter configuration.
 type OTLPConfig struct {
 	Endpoint string
@@ -43,7 +48,7 @@ func NewExporter(ctx context.Context, cfg *OTLPConfig, version string) (*Exporte
 	var exp sdkmetric.Exporter
 
 	switch cfg.Protocol {
-	case "http/protobuf":
+	case protocolHTTPProtobuf:
 		opts := []otlpmetrichttp.Option{
 			otlpmetrichttp.WithEndpoint(cfg.Endpoint),
 		}
@@ -58,7 +63,7 @@ func NewExporter(ctx context.Context, cfg *OTLPConfig, version string) (*Exporte
 		}
 
 		exp, err = otlpmetrichttp.New(ctx, opts...)
-	case "grpc":
+	case protocolGRPC:
 		opts := []otlpmetricgrpc.Option{
 			otlpmetricgrpc.WithEndpoint(cfg.Endpoint),
 		}

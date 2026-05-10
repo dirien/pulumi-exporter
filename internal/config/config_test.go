@@ -9,6 +9,8 @@ import (
 	"github.com/alecthomas/kingpin/v2"
 )
 
+const testOrgName = "org1"
+
 func TestDefaults(t *testing.T) {
 	t.Parallel()
 
@@ -32,8 +34,8 @@ func TestDefaults(t *testing.T) {
 		t.Errorf("expected endpoint %q, got %q", "localhost:4318", cfg.Exporters.Endpoint)
 	}
 
-	if cfg.Exporters.Protocol != "http/protobuf" {
-		t.Errorf("expected protocol %q, got %q", "http/protobuf", cfg.Exporters.Protocol)
+	if cfg.Exporters.Protocol != protocolHTTPProtobuf {
+		t.Errorf("expected protocol %q, got %q", protocolHTTPProtobuf, cfg.Exporters.Protocol)
 	}
 
 	if cfg.Exporters.Insecure != false {
@@ -79,7 +81,7 @@ otlp:
 		t.Errorf("expected api-url %q, got %q", "https://custom.pulumi.com", cfg.Pulumi.APIURL)
 	}
 
-	if len(cfg.Pulumi.Organizations) != 2 || cfg.Pulumi.Organizations[0] != "org1" || cfg.Pulumi.Organizations[1] != "org2" {
+	if len(cfg.Pulumi.Organizations) != 2 || cfg.Pulumi.Organizations[0] != testOrgName || cfg.Pulumi.Organizations[1] != "org2" {
 		t.Errorf("expected organizations [org1 org2], got %v", cfg.Pulumi.Organizations)
 	}
 
@@ -91,8 +93,8 @@ otlp:
 		t.Errorf("expected endpoint %q, got %q", "otel-collector:4317", cfg.Exporters.Endpoint)
 	}
 
-	if cfg.Exporters.Protocol != "grpc" {
-		t.Errorf("expected protocol %q, got %q", "grpc", cfg.Exporters.Protocol)
+	if cfg.Exporters.Protocol != protocolGRPC {
+		t.Errorf("expected protocol %q, got %q", protocolGRPC, cfg.Exporters.Protocol)
 	}
 
 	if cfg.Exporters.Insecure != true {
@@ -131,10 +133,10 @@ func TestValidateMissingToken(t *testing.T) {
 
 	cfg := &Config{
 		Pulumi: PulumiConfig{
-			Organizations: []string{"org1"},
+			Organizations: []string{testOrgName},
 		},
 		Exporters: ExportersConfig{
-			Protocol: "http/protobuf",
+			Protocol: protocolHTTPProtobuf,
 		},
 	}
 
@@ -157,7 +159,7 @@ func TestValidateMissingOrgs(t *testing.T) {
 			MaxConcurrency: 10,
 		},
 		Exporters: ExportersConfig{
-			Protocol: "http/protobuf",
+			Protocol: protocolHTTPProtobuf,
 		},
 	}
 
@@ -177,7 +179,7 @@ func TestValidateInvalidProtocol(t *testing.T) {
 	cfg := &Config{
 		Pulumi: PulumiConfig{
 			AccessToken:    "some-token",
-			Organizations:  []string{"org1"},
+			Organizations:  []string{testOrgName},
 			MaxConcurrency: 10,
 		},
 		Exporters: ExportersConfig{
@@ -206,7 +208,7 @@ func TestValidateSuccess(t *testing.T) {
 			MaxConcurrency: 10,
 		},
 		Exporters: ExportersConfig{
-			Protocol: "grpc",
+			Protocol: protocolGRPC,
 		},
 	}
 
@@ -214,7 +216,7 @@ func TestValidateSuccess(t *testing.T) {
 		t.Errorf("expected no error, got: %v", err)
 	}
 
-	cfg.Exporters.Protocol = "http/protobuf"
+	cfg.Exporters.Protocol = protocolHTTPProtobuf
 	if err := cfg.Validate(); err != nil {
 		t.Errorf("expected no error for http/protobuf, got: %v", err)
 	}
@@ -293,7 +295,7 @@ func TestMaxConcurrencyValidation(t *testing.T) {
 					MaxConcurrency: tt.value,
 				},
 				Exporters: ExportersConfig{
-					Protocol: "http/protobuf",
+					Protocol: protocolHTTPProtobuf,
 				},
 			}
 
