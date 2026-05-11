@@ -1,2 +1,2 @@
 pulumi-kubernetes==4.29.0
-pulumi>=3.0.0,<4.0.0
+pulumi>=3.237.0,<4.0.0
